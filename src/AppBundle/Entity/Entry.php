@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Entity;
+namespace AppBundle\Entity;
 
 
 use Symfony\Component\Validator\Constraints as Assert;
@@ -37,7 +37,7 @@ class Entry
     /**
      * @var $event Event
      */
-    private $event_id;
+    private $event;
 
     /**
      * @return mixed
@@ -50,7 +50,7 @@ class Entry
     /**
      * @param mixed $id
      */
-    public function setId($id): void
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -66,7 +66,7 @@ class Entry
     /**
      * @param mixed $firstname
      */
-    public function setFirstname($firstname): void
+    public function setFirstname($firstname)
     {
         $this->firstname = $firstname;
     }
@@ -82,7 +82,7 @@ class Entry
     /**
      * @param mixed $lastname
      */
-    public function setLastname($lastname): void
+    public function setLastname($lastname)
     {
         $this->lastname = $lastname;
     }
@@ -90,7 +90,7 @@ class Entry
     /**
      * @return Assert\Email
      */
-    public function getEmail(): Assert\Email
+    public function getEmail()
     {
         return $this->email;
     }
@@ -98,7 +98,7 @@ class Entry
     /**
      * @param Assert\Email $email
      */
-    public function setEmail(Assert\Email $email): void
+    public function setEmail(Assert\Email $email)
     {
         $this->email = $email;
     }
@@ -114,7 +114,7 @@ class Entry
     /**
      * @param mixed $phone
      */
-    public function setPhone($phone): void
+    public function setPhone($phone)
     {
         $this->phone = $phone;
     }
@@ -122,17 +122,17 @@ class Entry
     /**
      * @return Event
      */
-    public function getEventId(): Event
+    public function getEvent()
     {
         return $this->event_id;
     }
 
     /**
-     * @param Event $event_id
+     * @param Event $event
      */
-    public function setEventId(Event $event_id): void
+    public function setEvent(Event $event)
     {
-        $this->event_id = $event_id;
+        $this->event = $event;
     }
 
 

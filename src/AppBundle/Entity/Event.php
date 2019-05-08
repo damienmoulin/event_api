@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Entity;
+namespace AppBundle\Entity;
 
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -45,7 +45,7 @@ class Event
     /**
      * @param mixed $id
      */
-    public function setId($id): void
+    public function setId($id)
     {
         $this->id = $id;
     }
@@ -61,7 +61,7 @@ class Event
     /**
      * @param mixed $title
      */
-    public function setTitle($title): void
+    public function setTitle($title)
     {
         $this->title = $title;
     }
@@ -77,7 +77,7 @@ class Event
     /**
      * @param \DateTime $start
      */
-    public function setStart(\DateTime $start): void
+    public function setStart(\DateTime $start)
     {
         $this->start = $start;
     }
@@ -93,7 +93,7 @@ class Event
     /**
      * @param \DateTime $end
      */
-    public function setEnd(\DateTime $end): void
+    public function setEnd(\DateTime $end)
     {
         $this->end = $end;
     }
@@ -109,7 +109,7 @@ class Event
     /**
      * @param mixed $limit
      */
-    public function setLimit($limit): void
+    public function setLimit($limit)
     {
         $this->limit = intval($limit);
     }
