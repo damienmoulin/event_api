@@ -93,9 +93,13 @@ class EventController extends FOSRestController
                     ->getDefaultSession()
                     ->getModel(ApiSchema\EventModel::class);
 
-        try {
+        $event = $eventModel->findByPK(['event_id' => $id]);
 
-            $event = $eventModel->findByPK(['event_id' => $id]);
+        if (!$event) {
+            throw new HttpException(404,"Event not found");
+        }
+
+        try {
 
             $event
                 ->setTitle($request->get("title"))
@@ -107,6 +111,7 @@ class EventController extends FOSRestController
 
             $response = $this->success("update");
             return $this->handleView($this->view($response), Response::HTTP_ACCEPTED);
+
         } catch (\Exception $exception) {
             throw new HttpException(500, "Undefined error");
         }
@@ -130,11 +135,17 @@ class EventController extends FOSRestController
             ->getDefaultSession()
             ->getModel(ApiSchema\EventModel::class);
 
-        try {
-            $eventModel->deleteByPK(['event_id' => $id]);
+        $entryModel = $this->get('pomm')
+            ->getDefaultSession()
+            ->getModel(ApiSchema\EntryModel::class);
 
-            $response = $this->success("delete");
-            return $this->handleView($this->view($response), Response::HTTP_ACCEPTED);
+        $entryModel->deleteWhere('event_id = $*', [$id]);
+        $eventModel->deleteByPK(['event_id' => $id]);
+
+        $response = $this->success("delete");
+        return $this->handleView($this->view($response), Response::HTTP_ACCEPTED);
+        try {
+
         } catch (\Exception $exception) {
             throw new HttpException(500, "Undefined error");
         }

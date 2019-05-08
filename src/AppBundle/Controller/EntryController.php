@@ -85,7 +85,8 @@ class EntryController extends FOSRestController
             }
 
         }
-        return new Response();
+
+        throw new HttpException(404,"Event not found");
     }
 
     public function success($type) {
