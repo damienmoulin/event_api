@@ -26,3 +26,6 @@ set parameters.yml
 Run server
 
         php bin/console server:run
+
+### Routes
+https://github.com/damienmoulin/event_api/wiki/ROUTER-WIKI
