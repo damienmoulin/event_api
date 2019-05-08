@@ -114,6 +114,38 @@ class EventController extends FOSRestController
     }
 
     /**
+     * @param Request $request
+     * @return Response
+     * @throws \Exception
+     * @Rest\Delete("/")
+     */
+    public function deleteEvent(Request $request)
+    {
+        $id = intval($request->get("id"));
+
+        if (!$id) {
+            throw new HttpException(400,"param[id] must be not null and > 0");
+        }
+
+        $eventModel = $this->get('pomm')
+            ->getDefaultSession()
+            ->getModel(ApiSchema\EventModel::class);
+
+        try {
+            $event = $eventModel->findByPK(['event_id' => $id]);
+
+            $eventModel->deleteOne($event);
+
+            if($event->getTitle()) {
+                $response = $this->success("delete");
+                return $this->handleView($this->view($response), Response::HTTP_ACCEPTED);
+            }
+        } catch (\Exception $exception) {
+            throw new HttpException(500, "Undefined error");
+        }
+    }
+
+    /**
      * @param $date
      */
     public function validateDate($date)
@@ -127,6 +159,7 @@ class EventController extends FOSRestController
         switch ($type) {
             case "insert": $response = '{ status: 201, message:"event created"}';break;
             case "update": $response = '{ status: 202, message:"event updated"}';break;
+            case "delete": $response = '{ status: 202, message:"event deleted"}';break;
             default: $response = '{ status: 200, message:"success"}';break;
         }
 
