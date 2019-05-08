@@ -12,3 +12,8 @@ _errors:
 
 _main:
     resource: routing.yml
+
+_pomm:
+    resource: "@PommBundle/Resources/config/routing.yml"
+    prefix:   /_pomm
+

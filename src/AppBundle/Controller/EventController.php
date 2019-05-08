@@ -3,8 +3,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Entry;
-use AppBundle\Entity\Event;
+use AppBundle\Db\ApiSchema;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\Controller\FOSRestController;
 use Symfony\Component\HttpFoundation\Request;
@@ -23,6 +22,28 @@ class EventController extends FOSRestController
     /**
      * @param Request $request
      * @return Response
+     * @Rest\Get("/")
+     */
+    public function getEvent(Request $request)
+    {
+
+        $id = intval($request->get("id"));
+
+        if (!$id) {
+            throw new HttpException(400,"param [id] must be not null and > 0");
+        }
+
+        $event = $this->get('pomm')
+            ->getDefaultSession()
+            ->getModel(ApiSchema\EventModel::class)
+            ->find($id);
+
+        return $this->handleView($this->view(json_encode($event)), Response::HTTP_CREATED);
+    }
+
+    /**
+     * @param Request $request
+     * @return Response
      * @throws \Exception
      * @Rest\Post("/")
      */
@@ -31,16 +52,25 @@ class EventController extends FOSRestController
         $this->validateDate($request->get("start"));
         $this->validateDate($request->get("end"));
 
-        $event = new Event();
+        $event = new ApiSchema\Event([
+            'title' => $request->get("title"),
+            'start' => new \DateTime($request->get("start")),
+            'end' => new \DateTime($request->get("end")),
+            'limit' => intval($request->get("limit"))
 
-        $event->setTitle($request->get("title"));
-        $event->setStart(new \DateTime($request->get("start")));
-        $event->setEnd(new \DateTime($request->get("end")));
-        $event->setLimit($request->get("limit"));
+        ]);
 
-        var_dump($event);
+        try {
+            $this->get('pomm')
+                ->getDefaultSession()
+                ->getModel(ApiSchema\EventModel::class)
+                ->insertOne($event);
 
-        return new Response();
+            $response = $this->success("insert");
+            return $this->handleView($this->view($response), Response::HTTP_CREATED);
+        } catch (\Exception $exception) {
+            throw new HttpException(500, "Undefined error");
+        }
     }
 
     /**
@@ -52,4 +82,14 @@ class EventController extends FOSRestController
             throw new HttpException(400,"Unvalid Datetime");
         }
     }
+
+    public function success($type) {
+        switch ($type) {
+            case "insert": $response = '{ status: 201, message:"event created"}';break;
+            default: $response = '{ status: 200, message:"success"}';break;
+        }
+
+        return $response;
+    }
+
 }
