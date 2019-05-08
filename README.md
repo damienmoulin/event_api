@@ -20,8 +20,8 @@ set parameters.yml
             db_host: 127.0.0.1
             db_port: 5432
             db_name: api_event
-            db_user: guimauve
-            db_password: FWQTtgTRS
+            db_user: user
+            db_password: password
 
 Run server
 
